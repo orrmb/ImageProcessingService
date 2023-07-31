@@ -1,5 +1,6 @@
 from pathlib import Path
 from matplotlib.image import imread, imsave
+import random
 
 
 def rgb2gray(rgb):
@@ -51,17 +52,45 @@ class Img:
             self.data[i] = res
 
     def rotate(self):
-        # TODO remove the `raise` below, and write your implementation
+        #TODO remove the `raise` below, and write your implementation
+
         raise NotImplementedError()
 
     def salt_n_pepper(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        for i in range(len(self.data)):
+            for x in range(len(self.data[i])):
+                rand_num = random.uniform(0, 1)
+                if rand_num < 0.2:
+                    self.data[i][x] = 255
+                elif rand_num > 0.8:
+                    self.data[i][x] = 0
+
 
     def concat(self, other_img, direction='horizontal'):
         # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        height_other = len(other_img.data)
+        width_other = len(other_img.data[0])
+        height_self = len(self.data)
+        width_self = len(self.data[0])
+        try:
+            if height_other == height_self and width_self == width_other:
+                for i in range(height_other):
+                    self.data[i] = self.data[i] + other_img.data[i]
+        except:
+            raise RuntimeError("Please Enter 2 pictures in the same Dimensions")
 
     def segment(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        for i in range(len(self.data)):
+            for x in range(len(self.data[i])):
+                if self.data[i][x] >= 100:
+                    self.data[i][x] = 255
+                else:
+                    self.data[i][x] = 0
+
+
+
+if __name__== '__main__':
+    my_img = Img('test/beatles.jpeg')
+    other_img = Img('test/beatles.jpeg')
+    my_img.segment()
+    my_img.save_img()
