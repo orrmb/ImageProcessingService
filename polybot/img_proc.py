@@ -52,9 +52,24 @@ class Img:
             self.data[i] = res
 
     def rotate(self):
-        #TODO remove the `raise` below, and write your implementation
+        width = len(self.data)
+        high = len(self.data)
+        m = 0
 
-        raise NotImplementedError()
+
+        row , cols = (width , high)
+        arr = [[ 0 for i in range(row)] for j in range(cols)]
+
+        for g in range(width):
+            for k in range(high):
+                arr[g][k] = self.data[g][k]
+
+
+        for i in range(len(arr)):
+            for j in arr[i]:
+                for m in range(high -1, 0, -1 ):
+                    self.data[i][m] = j
+           
 
     def salt_n_pepper(self):
         for i in range(len(self.data)):
@@ -67,7 +82,6 @@ class Img:
 
 
     def concat(self, other_img, direction='horizontal'):
-        # TODO remove the `raise` below, and write your implementation
         height_other = len(other_img.data)
         width_other = len(other_img.data[0])
         height_self = len(self.data)
@@ -92,5 +106,5 @@ class Img:
 if __name__== '__main__':
     my_img = Img('test/beatles.jpeg')
     other_img = Img('test/beatles.jpeg')
-    my_img.segment()
+    my_img.rotate()
     my_img.save_img()
