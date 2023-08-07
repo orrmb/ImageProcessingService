@@ -1,6 +1,5 @@
 # Image processing service
 
-## Background
 
 In this project, you develop an image processing service. 
 Clients send images to a Telegram chatbot, and choose a filter to apply:
@@ -284,6 +283,8 @@ A few notes:
 - Inside the `ImageProcessingBot` class, override `handle_message` method and implement the needed functionality.
 - Remember that by inheriting the `Bot` class, you can use all of its methods (such as `send_text`, `download_user_photo`, `send_photo`...). 
 - Possible `caption` values are: `['Blur', 'Contour', 'Rotate', 'Segment', 'Salt and pepper', 'Concat']`.
+
+**Note**: Your bot should support the `Blur` and `Contour` filters (those filters have already implemented for you). 
 
 Test your bot on real photos and make sure it's functioning properly.
 
