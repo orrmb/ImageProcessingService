@@ -3,6 +3,7 @@ from loguru import logger
 import os
 import time
 from telebot.types import InputFile
+from polybot import img_proc
 from polybot.img_proc import Img
 
 
@@ -38,6 +39,7 @@ class Bot:
         """
         if not self.is_current_msg_photo(msg):
             raise RuntimeError(f'Message content of type \'photo\' expected')
+
 
         file_info = self.telegram_bot_client.get_file(msg['photo'][-1]['file_id'])
         data = self.telegram_bot_client.download_file(file_info.file_path)
@@ -75,4 +77,68 @@ class QuoteBot(Bot):
 
 
 class ImageProcessingBot(Bot):
-    pass
+    def imag_filters(self, path, msg):
+
+            img = Img(path)
+            if 'caption' in msg:
+                if msg['caption'] == 'salt and paper':
+                    img.salt_n_pepper()
+                    img.save_img()
+                    time.sleep(0.5)
+                    Bot.send_photo(self, msg['chat']['id'], img_path='/home/orb/Ex_Course/ImageProcessingService/polybot/photos/file_0_filtered.jpg' )
+                elif msg['caption'] == 'concat':
+                    img.concat()
+                    img.save_img()
+                    time.sleep(0.5)
+                    Bot.send_photo(self, msg['chat']['id'],
+                                   img_path='/home/orb/Ex_Course/ImageProcessingService/polybot/photos/file_0_filtered.jpg')
+                elif msg['caption'] == 'segment':
+                    img.segment()
+                    img.save_img()
+                    time.sleep(0.5)
+                    Bot.send_photo(self, msg['chat']['id'],
+                                   img_path='/home/orb/Ex_Course/ImageProcessingService/polybot/photos/file_0_filtered.jpg')
+                elif msg['caption'] == 'blur':
+                    img.blur()
+                    img.save_img()
+                    time.sleep(0.5)
+                    Bot.send_photo(self, msg['chat']['id'],
+                                   img_path='/home/orb/Ex_Course/ImageProcessingService/polybot/photos/file_0_filtered.jpg')
+                elif msg['caption'] == 'contur':
+                    img.contour()
+                    img.save_img()
+                    time.sleep(0.5)
+                    Bot.send_photo(self, msg['chat']['id'],
+                                   img_path='/home/orb/Ex_Course/ImageProcessingService/polybot/photos/file_0_filtered.jpg')
+
+
+
+
+
+
+    def greet_user(self, msg):
+
+        if self.is_current_msg_photo(msg) == True:
+            if 'caption' in msg:
+                self.send_text(msg['chat']['id'], text='thank you')
+                self.send_text(msg['chat']['id'], text='a few moment')
+                time.sleep(1.0)
+                logger.info(f'Incoming message: {msg} ')
+                self.download_user_photo(msg)
+                self.imag_filters('/home/orb/Ex_Course/ImageProcessingService/polybot/photos/file_0.jpg',msg)
+            else:
+                self.send_text(msg['chat']['id'], text='Please send me again, this time try this filters: salt_n_paper, concat, segment, Blur')
+
+        else:
+            self.send_text(msg['chat']['id'], text='Hi, send me a photo please')
+
+
+
+
+
+
+
+
+
+
+
