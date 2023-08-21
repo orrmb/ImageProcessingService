@@ -93,6 +93,7 @@ class Img:
         except:
             raise RuntimeError("Please Enter 2 pictures in the same Dimensions")
 
+
     def segment(self):
         for i in range(len(self.data)):
             for x in range(len(self.data[i])):
