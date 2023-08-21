@@ -78,45 +78,57 @@ class QuoteBot(Bot):
 
 class ImageProcessingBot(Bot):
     def imag_filters(self, path, msg):
-
+            other_img= Img(path)
             img = Img(path)
+
             if 'caption' in msg:
-                if msg['caption'] == 'salt and paper':
+                if msg['caption'] == 'Salt and paper':
                     img.salt_n_pepper()
-                    img.save_img()
+                    new_path = img.save_img()
                     time.sleep(0.5)
-                    Bot.send_photo(self, msg['chat']['id'], img_path='/home/orb/Ex_Course/ImageProcessingService/polybot/photos/file_0_filtered.jpg' )
-                elif msg['caption'] == 'concat':
-                    img.concat()
-                    img.save_img()
-                    time.sleep(0.5)
-                    Bot.send_photo(self, msg['chat']['id'],
-                                   img_path='/home/orb/Ex_Course/ImageProcessingService/polybot/photos/file_0_filtered.jpg')
-                elif msg['caption'] == 'segment':
+                    Bot.send_photo(self, msg['chat']['id'], img_path=new_path)
+                    time.sleep(2)
+                    #self.delet_content()
+                elif msg['caption'] == 'Concat':
+                    if 'media_group_id' in msg:
+                        img.concat(other_img)
+                        new_path = img.save_img()
+                        time.sleep(0.5)
+                        Bot.send_photo(self, msg['chat']['id'], img_path=new_path)
+                        time.sleep(2)
+                        pass
+                    else:
+                        self.send_text(msg['chat']['id'], text='there is one image, try with another image')
+                    #self.delet_content()
+                elif msg['caption'] == 'Segment':
                     img.segment()
-                    img.save_img()
-                    time.sleep(0.5)
-                    Bot.send_photo(self, msg['chat']['id'],
-                                   img_path='/home/orb/Ex_Course/ImageProcessingService/polybot/photos/file_0_filtered.jpg')
-                elif msg['caption'] == 'blur':
+                    new_path = img.save_img()
+                    time.sleep(1)
+                    Bot.send_photo(self, msg['chat']['id'], img_path=new_path)
+                    time.sleep(3)
+                    #self.delet_content()
+                elif msg['caption'] == 'Blur':
                     img.blur()
-                    img.save_img()
+                    new_path = img.save_img()
                     time.sleep(0.5)
-                    Bot.send_photo(self, msg['chat']['id'],
-                                   img_path='/home/orb/Ex_Course/ImageProcessingService/polybot/photos/file_0_filtered.jpg')
-                elif msg['caption'] == 'contur':
+                    Bot.send_photo(self, msg['chat']['id'], img_path= new_path)
+                    time.sleep(2)
+                    #self.delet_content()
+                elif msg['caption'] == 'Contour':
                     img.contour()
-                    img.save_img()
+                    new_path = img.save_img()
                     time.sleep(0.5)
-                    Bot.send_photo(self, msg['chat']['id'],
-                                   img_path='/home/orb/Ex_Course/ImageProcessingService/polybot/photos/file_0_filtered.jpg')
+                    Bot.send_photo(self, msg['chat']['id'], img_path=new_path)
+                    time.sleep(2)
+                    #self.delet_content()
+                else:
+                    self.send_text(msg['chat']['id'], text='I don`t know this filter, try these one: salt and paper, concat, segment, Blur, contur' )
 
 
 
+    def handle_message(self, msg):
 
-
-
-    def greet_user(self, msg):
+        filename = self.download_user_photo(msg)
 
         if self.is_current_msg_photo(msg) == True:
             if 'caption' in msg:
@@ -124,13 +136,23 @@ class ImageProcessingBot(Bot):
                 self.send_text(msg['chat']['id'], text='a few moment')
                 time.sleep(1.0)
                 logger.info(f'Incoming message: {msg} ')
-                self.download_user_photo(msg)
-                self.imag_filters('/home/orb/Ex_Course/ImageProcessingService/polybot/photos/file_0.jpg',msg)
+                self.imag_filters('/home/orb/Ex_Course/ImageProcessingService/polybot/{filename}'.format(filename= filename), msg)
             else:
+                logger.info(f'Incoming message: {msg} ')
                 self.send_text(msg['chat']['id'], text='Please send me again, this time try this filters: salt_n_paper, concat, segment, Blur')
 
         else:
             self.send_text(msg['chat']['id'], text='Hi, send me a photo please')
+
+
+    def delet_content(self):
+
+        dir = '/home/orb/Ex_Course/ImageProcessingService/polybot/photos'
+        for f in os.listdir(dir):
+            os.remove(os.path.join(dir, f))
+
+
+
 
 
 

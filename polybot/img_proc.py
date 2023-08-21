@@ -58,7 +58,7 @@ class Img:
 
 
         row , cols = (width , high)
-        arr = [[ 0 for i in range(row)] for j in range(cols)]
+        arr = [[0 for i in range(row)] for j in range(cols)]
 
         for g in range(width):
             for k in range(high):
@@ -106,5 +106,5 @@ class Img:
 if __name__== '__main__':
     my_img = Img('test/beatles.jpeg')
     other_img = Img('test/beatles.jpeg')
-    my_img.rotate()
+    my_img.salt_n_pepper()
     my_img.save_img()
