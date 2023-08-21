@@ -145,6 +145,7 @@ class ImageProcessingBot(Bot):
             self.send_text(msg['chat']['id'], text='Hi, send me a photo please')
 
 
+
     def delet_content(self):
 
         dir = '/home/orb/Ex_Course/ImageProcessingService/polybot/photos'

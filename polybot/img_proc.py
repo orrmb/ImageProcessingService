@@ -103,6 +103,7 @@ class Img:
 
 
 
+
 if __name__== '__main__':
     my_img = Img('test/beatles.jpeg')
     other_img = Img('test/beatles.jpeg')
